@@ -1,0 +1,65 @@
+
+volumes:
+  flooke_postgres_data:
+
+networks:
+  flooke-network:
+
+services:
+  # flooke_db:
+  #   image: postgres
+  #   environment:
+  #     POSTGRES_USER: $POSTGRES_USER
+  #     POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+  #     POSTGRES_DB: $POSTGRES_DB_NAME
+  #   ports:
+  #     - "$POSTGRES_PORT:$POSTGRES_PORT"
+  #   restart: on-failure
+  #   volumes:
+  #     - flooke_postgres_data:/var/lib/postgresql/data/
+
+  dynamodb:
+    image: "amazon/dynamodb-local:latest"
+    container_name: dynamodb
+    user: root
+    command: "-jar DynamoDBLocal.jar -sharedDb -dbPath ./data"
+    ports:
+      - "$DYNAMODB_PORT:$DYNAMODB_PORT"
+    restart: always
+    volumes:
+      - "./docker/dynamodb:/home/dynamodblocal/data"
+    working_dir: /home/dynamodblocal
+    networks:
+      - flooke-network
+
+  # app_node:
+  #   depends_on:
+  #     - dynamodb
+  #   image: amazon/aws-cli
+  #   container_name: app_node
+  #   ports:
+  #     - "8080:8080"
+  #   environment:
+  #     AWS_ACCESS_KEY_ID: 'DUMMYIDEXAMPLE'
+  #     AWS_SECRET_ACCESS_KEY: 'DUMMYEXAMPLEKEY'
+  #   command:
+  #     dynamodb describe-limits --endpoint-url http://dynamodb:8000 --region us-west-2
+
+  flooke_server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: flooke_server
+    command: python manage.py runserver 0.0.0.0:$SERVER_PORT
+    network_mode: host
+    hostname: flooke_server
+    image: flooke-server-image
+    depends_on:
+      # - flooke_db
+      - dynamodb
+    environment:
+      AWS_ACCESS_KEY_ID: 'DUMMYIDEXAMPLE'
+      AWS_SECRET_ACCESS_KEY: 'DUMMYEXAMPLEKEY'
+      REGION: 'eu-west-1'
+    env_file:
+      - .env
