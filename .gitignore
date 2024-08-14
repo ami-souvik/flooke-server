@@ -3,3 +3,4 @@
 /venv
 /aws
 /docker
+**/__pycache__/

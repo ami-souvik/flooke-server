@@ -5,7 +5,7 @@ from utils.env_handler import get_dynamodb_conf
 
 db_conf = get_dynamodb_conf()
 
-class Transaction(Model):
+class TransactionModel(Model):
     class Meta:
         table_name = 'Transaction'
         # Specifies the region

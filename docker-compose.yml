@@ -24,7 +24,7 @@ services:
     user: root
     command: "-jar DynamoDBLocal.jar -sharedDb -dbPath ./data"
     ports:
-      - "$DYNAMODB_PORT:$DYNAMODB_PORT"
+      - 8000:8000
     restart: always
     volumes:
       - "./docker/dynamodb:/home/dynamodblocal/data"
@@ -51,7 +51,6 @@ services:
       dockerfile: Dockerfile
     container_name: flooke_server
     command: python manage.py runserver 0.0.0.0:$SERVER_PORT
-    network_mode: host
     hostname: flooke_server
     image: flooke-server-image
     depends_on:
@@ -63,3 +62,5 @@ services:
       REGION: 'eu-west-1'
     env_file:
       - .env
+    networks:
+      flooke-network:

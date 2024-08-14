@@ -1,20 +1,13 @@
 from utils.env_handler import get_dynamodb_conf
 from django.core.management.base import BaseCommand, CommandError
 from pynamodb.models import Model
-from transaction.models import Transaction
-import boto3
-
-# Create a DynamoDB client
-db_conf = get_dynamodb_conf()
-dynamodb = boto3.client('dynamodb', 
-                        endpoint_url=db_conf["host"], 
-                        region_name=db_conf["region"]) 
 
 
 class Command(BaseCommand):
     help = 'Setup DynamoDB database'
 
     def add_arguments(self, parser):
+        db_conf = get_dynamodb_conf()
         # host is optional argument
         parser.add_argument(
             "--host",
@@ -32,22 +25,24 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         self.stdout.write('Running DynamoDB database setup...')
         try:
-            # Create a table
-            table_name = 'my_table'
-            dynamodb.create_table(
-                TableName=table_name,
-                KeySchema=[
-                    {'AttributeName': 'id', 'KeyType': 'HASH'}
-                ],
-                AttributeDefinitions=[
-                    {'AttributeName': 'id', 'AttributeType': 'S'}
-                ],
-                ProvisionedThroughput={
-                    'ReadCapacityUnits': 5,
-                    'WriteCapacityUnits': 5
-                }
-            )
+            # Get the host and region from the command line arguments
+            host = options.get("host")
+            print(f"DynamoDB host is set to {host}")
+            region = options.get("region")
+            print(f"DynamoDB region is set to {region}")
+            print("Creating tables...")
+            print(Model.__subclasses__())
+            for model in Model.__subclasses__():
+                # Set the host and region
+                model.Meta.host = host
+                model.Meta.region = region
+                # Create the table
+                model.create_table(
+                    read_capacity_units=1,
+                    write_capacity_units=1
+                )
+                print(f"{model.Meta.table_name} table is created successfully")
             print("DynamoDB database setup completed successfully!!")
         except Exception as e:
-            print(f"[ERORR] DynamoDB setup failed: {e}")
-            CommandError(f"[ERORR] DynamoDB setup failed: {e}")
+            CommandError(f"DynamoDB setup failed: {e}")
+            print(f"[ERROR] DynamoDB setup failed: {e}")
