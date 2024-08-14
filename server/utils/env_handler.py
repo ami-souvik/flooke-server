@@ -1,10 +1,12 @@
-import os
+import environ
+
+env = environ.Env()
 
 def get_env_variable(v):
-    return os.environ.get(v)
+    return env(v)
 
 def get_dynamodb_conf():
     return {
-        "region": os.environ.get('DYNAMODB_REGION'),
-        "host": os.environ.get('DYNAMODB_HOST')
+        "region": env('DYNAMODB_REGION'),
+        "host": "http://localhost:8000"
     }

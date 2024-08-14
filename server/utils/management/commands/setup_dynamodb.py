@@ -13,7 +13,7 @@ class Command(BaseCommand):
             "--host",
             help="""Set the DynamoDB host. By default, It will use aws cli default profile.
             For local development, use http://localhost:9999 or use DynamoDB host url.""",
-            default=db_conf["host"]
+            default=db_conf.get("host", "http://localhost:8000")
         )
 
         parser.add_argument(
