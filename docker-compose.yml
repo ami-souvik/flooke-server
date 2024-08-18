@@ -1,43 +1,22 @@
-
-networks:
-  flooke-network:
-
 services:
-
-  dynamodb:
-    image: "amazon/dynamodb-local:latest"
-    container_name: dynamodb
-    user: root
-    command: "-jar DynamoDBLocal.jar -sharedDb -dbPath ./data"
-    # network_mode: host
-    networks:
-      - flooke-network
+  db:
+    image: postgres
+    restart: always
+    # set shared memory limit when using docker-compose
+    shm_size: 128mb
+    # or set shared memory limit when deploy via swarm stack
+    #volumes:
+    #  - type: tmpfs
+    #    target: /dev/shm
+    #    tmpfs:
+    #      size: 134217728 # 128*2^20 bytes = 128Mb
     ports:
-      - 8000:8000
-    restart: unless-stopped
-    volumes:
-      - "./docker/dynamodb:/home/dynamodblocal/data"
-    working_dir: /home/dynamodblocal
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: example
 
-  flooke_server:
-    build:
-      context: ./server
-      dockerfile: Dockerfile
-    container_name: flooke_server
-    command: python manage.py runserver 0.0.0.0:8080
-    hostname: flooke_server
-    image: flooke-server-image
-    # network_mode: host
-    networks:
-      flooke-network:
+  adminer:
+    image: adminer
+    restart: always
     ports:
       - 8080:8080
-    depends_on:
-      # - flooke_db
-      - dynamodb
-    environment:
-      AWS_ACCESS_KEY_ID: 'DUMMYIDEXAMPLE'
-      AWS_SECRET_ACCESS_KEY: 'DUMMYEXAMPLEKEY'
-      REGION: 'eu-west-1'
-    env_file:
-      - server/.env
