@@ -14,7 +14,7 @@ class Content(Model):
     """Content model contains user posted content"""
     owner = ForeignKey(
         settings.AUTH_USER_MODEL,
-        null=True,
+        null=False,
         related_name="creator",
         on_delete=CASCADE,
     )
