@@ -1,9 +1,9 @@
 from uuid import uuid4
 from datetime import datetime
+from django.db.models import Model
 from rest_framework.fields import empty
 from rest_framework.serializers import ModelSerializer as djangoModelSerializer
 from .attr_handler import rsetattr
-from .models import Model
 
 class ModelSerializer(djangoModelSerializer):
 

@@ -43,17 +43,15 @@ EXTERNAL_APPS = [
     'rest_framework'
 ]
 PROJECT_APPS = [
-    'identity.apps.IdentityConfig',
+    'basic_auth.apps.AuthConfig',
     'content.apps.ContentConfig',
     'utils.apps.UtilsConfig',
-    'users.apps.UsersConfig',
-    'content_management.apps.ContentManagementConfig',
 ]
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_ESSENTIALS + EXTERNAL_APPS + PROJECT_APPS
 
-MIDDLEWARE = [
+DEFAULT_MIDDLEWARES = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -62,8 +60,12 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+PROJECT_MIDDLEWARES = []
 
-ROOT_URLCONF = 'app.urls'
+# https://docs.djangoproject.com/en/dev/ref/settings/#std-setting-MIDDLEWARE
+MIDDLEWARE = DEFAULT_MIDDLEWARES + PROJECT_MIDDLEWARES
+
+ROOT_URLCONF = 'app.urls.base'
 
 TEMPLATES = [
     {
@@ -149,4 +151,10 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
-AUTH_USER_MODEL = "identity.Identity"
+AUTH_USER_MODEL = "basic_auth.User"
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTStatelessUserAuthentication',
+    )
+}

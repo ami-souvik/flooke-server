@@ -1,16 +1,16 @@
-from uuid import uuid4
 from datetime import datetime
+from django.contrib.auth.hashers import make_password
 from rest_framework.serializers import ModelSerializer
-from .models import Persona
+from .models import User
 
 class UserSerializer(ModelSerializer):
 
     class Meta:
-        model = Persona
-        exclude = ['created_at', 'updated_at', 'id']
+        model = User
+        exclude = ['created_at', 'updated_at']
 
     def create(self, validated_data):
-        validated_data["id"] = str(uuid4())
+        validated_data["password"] = make_password(validated_data["password"])
         validated_data["created_at"] = datetime.now()
         validated_data["updated_at"] = datetime.now()
         return super().create(validated_data)

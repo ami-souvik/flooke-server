@@ -2,16 +2,16 @@ from django.forms.models import model_to_dict
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import Persona
-from utils.serializers import get_serializer
+from .models import User
+from .serializers import UserSerializer
 
 # Create your views here.
-class UserView(APIView):
+class AuthView(APIView):
 
     def get(self, request, *args, **kwargs):
         try:
             users = []
-            for u in Persona.objects.all():
+            for u in User.objects.all():
                 users.append(model_to_dict(u))
             return Response(
                 users,
@@ -25,7 +25,7 @@ class UserView(APIView):
 
     def post(self, request, *args, **kwargs):
         try:
-            serializer = get_serializer(Persona, data=request.data)
+            serializer = UserSerializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             return Response(
                 model_to_dict(serializer.save()),
