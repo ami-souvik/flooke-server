@@ -31,19 +31,27 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
-
-INSTALLED_APPS = [
-    'content_management.apps.ContentManagementConfig',
-    'users.apps.UsersConfig',
-    'django.contrib.admin',
+DJANGO_ESSENTIALS = [
+    # 'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'utils',
+]
+EXTERNAL_APPS = [
     'rest_framework'
 ]
+PROJECT_APPS = [
+    'identity.apps.IdentityConfig',
+    'content.apps.ContentConfig',
+    'utils.apps.UtilsConfig',
+    'users.apps.UsersConfig',
+    'content_management.apps.ContentManagementConfig',
+]
+
+# https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
+INSTALLED_APPS = DJANGO_ESSENTIALS + EXTERNAL_APPS + PROJECT_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -139,3 +147,6 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
+AUTH_USER_MODEL = "identity.Identity"

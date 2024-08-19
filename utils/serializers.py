@@ -9,17 +9,11 @@ class ModelSerializer(djangoModelSerializer):
 
     class Meta:
         model = Model
-        exclude = []
-
-    def __init__(self, instance=None, data=empty, **kwargs):
         exclude = ['created_at', 'updated_at', 'id']
-        if hasattr(self, 'Meta') and hasattr(self.Meta, 'exclude'):
-            exclude.extend(self.Meta.exclude)
-        self.Meta.exclude = exclude
-        super().__init__(instance, data, **kwargs)
 
     def create(self, validated_data):
-        validated_data["id"] = str(uuid4())
+        if "id" not in validated_data:
+            validated_data["id"] = str(uuid4())
         validated_data["created_at"] = datetime.now()
         validated_data["updated_at"] = datetime.now()
         return super().create(validated_data)
@@ -31,5 +25,5 @@ class ModelSerializer(djangoModelSerializer):
 def get_serializer(model, exclude=[], data=empty):
     model_serializer = ModelSerializer(data=data)
     rsetattr(model_serializer, 'Meta.model', model)
-    rsetattr(model_serializer, 'Meta.exclude', exclude)
+    model_serializer.Meta.exclude.extend(exclude)
     return model_serializer
