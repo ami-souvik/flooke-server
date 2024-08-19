@@ -29,6 +29,8 @@ class ContentView(APIView):
     
     def post(self, request):
         try:
+            user = request.META["context"]["user"]
+            request.data["owner"] = user.pk
             serialized = ContentSerializer(data=request.data)
             serialized.is_valid(raise_exception=True)
             return Response(
