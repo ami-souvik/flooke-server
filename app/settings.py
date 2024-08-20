@@ -45,7 +45,7 @@ EXTERNAL_APPS = [
 PROJECT_APPS = [
     'basic_auth.apps.AuthConfig',
     'content.apps.ContentConfig',
-    'utils.apps.UtilsConfig',
+    # 'utils.apps.UtilsConfig',
 ]
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -158,4 +158,14 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTStatelessUserAuthentication',
     )
+}
+
+# Personalized authentication backend
+AUTHENTICATION_BACKENDS = ['basic_auth.backends.ModelBackend']
+
+# Simple jwt authentication config
+SIMPLE_JWT = {
+    # It will work instead of the default serializer(TokenObtainPairSerializer).
+    "TOKEN_OBTAIN_SERIALIZER": "basic_auth.serializers.ObtainTokenSerializer",
+    "TOKEN_REFRESH_SERIALIZER": 'basic_auth.serializers.RefreshTokenSerializer'
 }

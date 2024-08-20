@@ -26,3 +26,4 @@ class Content(Model):
     updated_at = DateTimeField()
 
     objects = ContentQuerySet.as_manager()
+

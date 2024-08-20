@@ -1,5 +1,5 @@
 from uuid import uuid4
-from datetime import datetime
+from django.utils import timezone
 from django.db.models import Model
 from rest_framework.fields import empty
 from rest_framework.serializers import ModelSerializer as djangoModelSerializer
@@ -14,12 +14,12 @@ class ModelSerializer(djangoModelSerializer):
     def create(self, validated_data):
         if "id" not in validated_data:
             validated_data["id"] = str(uuid4())
-        validated_data["created_at"] = datetime.now()
-        validated_data["updated_at"] = datetime.now()
+        validated_data["created_at"] = timezone.now()
+        validated_data["updated_at"] = timezone.now()
         return super().create(validated_data)
     
     def update(self, instance, validated_data):
-        instance.updated_at = datetime.now()
+        instance.updated_at = timezone.now()
         return super().update(instance, validated_data)
 
 def get_serializer(model, exclude=[], data=empty):

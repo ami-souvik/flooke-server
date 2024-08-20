@@ -1,8 +1,9 @@
-from .models import Content
+from django.contrib import auth
 from django.forms.models import model_to_dict
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from .models import Content
 from .serializers import ContentSerializer
 from utils.dict_handler import destruct
 
@@ -30,7 +31,7 @@ class ContentView(APIView):
     def post(self, request):
         try:
             user = request.META["context"]["user"]
-            request.data["owner"] = user.pk
+            request.data["owner"] = user.id
             serialized = ContentSerializer(data=request.data)
             serialized.is_valid(raise_exception=True)
             return Response(
