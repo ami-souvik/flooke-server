@@ -40,20 +40,26 @@ DJANGO_ESSENTIALS = [
     'django.contrib.staticfiles',
 ]
 EXTERNAL_APPS = [
-    'rest_framework'
+    'corsheaders',
+    'rest_framework',
 ]
 PROJECT_APPS = [
     'basic_auth.apps.AuthConfig',
     'content.apps.ContentConfig',
-    # 'utils.apps.UtilsConfig',
+    'comment.apps.CommentConfig'
 ]
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_ESSENTIALS + EXTERNAL_APPS + PROJECT_APPS
 
-DEFAULT_MIDDLEWARES = [
+# Allowed origins
+CORS_ALLOWED_ORIGINS = os.environ.get('ALLOWED_ORIGINS').split(',') if os.environ.get('ALLOWED_ORIGINS', None) else []
+
+# https://docs.djangoproject.com/en/dev/ref/settings/#std-setting-MIDDLEWARE
+MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     # 'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -61,10 +67,6 @@ DEFAULT_MIDDLEWARES = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-PROJECT_MIDDLEWARES = []
-
-# https://docs.djangoproject.com/en/dev/ref/settings/#std-setting-MIDDLEWARE
-MIDDLEWARE = DEFAULT_MIDDLEWARES + PROJECT_MIDDLEWARES
 
 ROOT_URLCONF = 'app.urls.base'
 
@@ -167,5 +169,5 @@ AUTHENTICATION_BACKENDS = ['basic_auth.backends.ModelBackend']
 SIMPLE_JWT = {
     # It will work instead of the default serializer(TokenObtainPairSerializer).
     "TOKEN_OBTAIN_SERIALIZER": "basic_auth.serializers.ObtainTokenSerializer",
-    "TOKEN_REFRESH_SERIALIZER": 'basic_auth.serializers.RefreshTokenSerializer'
+    # "TOKEN_REFRESH_SERIALIZER": 'basic_auth.serializers.RefreshTokenSerializer'
 }

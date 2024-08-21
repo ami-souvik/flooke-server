@@ -2,23 +2,29 @@ from django.conf import settings
 from django.db.models import Model, ForeignKey, CharField, DateTimeField, CASCADE
 from django.db.models.query import QuerySet
 
-class ContentQuerySet(QuerySet):
+class CommentQuerySet(QuerySet):
     """Personalized queryset created to improve model usability"""
-    pass
+    def all_by_content(self, user_id, content_id):
+        return self.filter(owner=user_id, content=content_id)
 
-class Content(Model):
+class Comment(Model):
     """Content model contains user posted content"""
     owner = ForeignKey(
         settings.AUTH_USER_MODEL,
         null=False,
-        related_name="creator",
+        related_name="commentor",
         on_delete=CASCADE,
     )
-    title = CharField(max_length=255, null=False)
+    content = ForeignKey(
+        'content.Content',
+        null=False,
+        related_name="article",
+        on_delete=CASCADE,
+    )
     body = CharField(max_length=1024, null=False)
 
     created_at = DateTimeField()
     updated_at = DateTimeField()
 
-    objects = ContentQuerySet.as_manager()
+    objects = CommentQuerySet.as_manager()
 

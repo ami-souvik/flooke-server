@@ -8,5 +8,6 @@ urlpatterns = [
     ('auth/users/', include('basic_auth.urls')),
     ('token/', TokenObtainPairView.as_view(), { "name": 'token_obtain_pair' }),
     ('token/refresh/', TokenRefreshView.as_view(), { "name": 'token_refresh' }),
-    ('content/', include('content.urls'))
+    ('content/', include('content.urls')),
+    ('comment/', include('comment.urls'))
 ]
