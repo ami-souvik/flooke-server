@@ -2,7 +2,7 @@ from django.forms.models import model_to_dict
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import User
+from utils.dict_handler import destruct
 from .serializers import UserSerializer
 
 # Create your views here.
@@ -10,16 +10,20 @@ class AuthView(APIView):
 
     def get(self, request, *args, **kwargs):
         try:
-            users = []
-            for u in User.objects.all():
-                users.append(model_to_dict(u))
+            user = request.META["context"]["user"]
+            username, first_name, last_name, email = destruct(dict=model_to_dict(user), keys=["username", "first_name", "last_name", "email"])
             return Response(
-                users,
+                {
+                    "username": username,
+                    "first_name": first_name,
+                    "last_name": last_name,
+                    "email": email
+                },
                 status=HTTP_200_OK
             )
         except Exception as e:
             return Response(
-                f"[ERROR] While creating user: {str(e)}",
+                f"[ERROR] While fetching user: {str(e)}",
                 status=HTTP_400_BAD_REQUEST
             )
 
