@@ -4,8 +4,8 @@ from django.db.models.query import QuerySet
 
 class CommentQuerySet(QuerySet):
     """Personalized queryset created to improve model usability"""
-    def all_by_content(self, user_id, content_id):
-        return self.filter(owner=user_id, content=content_id)
+    def all_by_content(self, content_id):
+        return self.filter(content=content_id)
 
 class Comment(Model):
     """Content model contains user posted content"""

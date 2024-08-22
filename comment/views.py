@@ -4,6 +4,7 @@ from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Comment
+from basic_auth.models import User
 from .serializers import CommentSerializer
 from utils.dict_handler import destruct
 
@@ -15,11 +16,19 @@ class CommentView(APIView):
     def get(self, request, *args, **kwargs):
         try:
             result = []
-            user = request.META["context"]["user"]
             content_id = kwargs.get("content_id")
-            comments = Comment.objects.all_by_content(user_id=user.id, content_id=content_id)
+            comments = Comment.objects.all_by_content(content_id=content_id)
+            owner_ids = []
             for c in comments:
-                result.append(model_to_dict(c))
+                owner_ids.append(model_to_dict(c)["owner"])
+            owners = User.objects.filter(id__in=tuple(owner_ids))
+            owners_map = dict()
+            for o in owners:
+                owners_map[o.id] = o.to_dict()
+            for c in comments:
+                _c = model_to_dict(c)
+                _c["owner"] = owners_map[_c["owner"]]
+                result.append(_c)
             return Response(
                 result,
                 status=HTTP_200_OK

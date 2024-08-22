@@ -40,6 +40,7 @@ DJANGO_ESSENTIALS = [
     'django.contrib.staticfiles',
 ]
 EXTERNAL_APPS = [
+    'channels',
     'corsheaders',
     'rest_framework',
 ]
@@ -86,6 +87,7 @@ TEMPLATES = [
     },
 ]
 
+ASGI_APPLICATION = 'app.asgi.application'
 # WSGI_APPLICATION = 'app.wsgi.application'
 
 # Envrionment Variables

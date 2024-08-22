@@ -20,3 +20,8 @@ class UserSerializer(ModelSerializer):
 
 class ObtainTokenSerializer(TokenObtainPairSerializer):
     pass
+
+class UpdateUserSerializer(ModelSerializer):
+    class Meta:
+        model = User
+        exclude = ['created_at', 'updated_at', 'username', 'password']
