@@ -184,3 +184,7 @@ SIMPLE_JWT = {
     "TOKEN_OBTAIN_SERIALIZER": "basic_auth.serializers.ObtainTokenSerializer",
     # "TOKEN_REFRESH_SERIALIZER": 'basic_auth.serializers.RefreshTokenSerializer'
 }
+
+GRAPHENE = {
+    'SCHEMA': 'app.schema.schema'
+}
