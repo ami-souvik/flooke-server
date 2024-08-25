@@ -1,3 +1,4 @@
+import structlog
 from django.contrib import auth
 from django.forms.models import model_to_dict
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
@@ -7,6 +8,9 @@ from .models import Comment
 from basic_auth.models import User
 from .serializers import CommentSerializer
 from utils.dict_handler import destruct
+
+logger = structlog.get_logger(__name__)
+
 
 class CommentView(APIView):
     """Basic ListView implementation to get the posted contents list."""
@@ -18,17 +22,8 @@ class CommentView(APIView):
             result = []
             content_id = kwargs.get("content_id")
             comments = Comment.objects.all_by_content(content_id=content_id)
-            owner_ids = []
             for c in comments:
-                owner_ids.append(model_to_dict(c)["owner"])
-            owners = User.objects.filter(id__in=tuple(owner_ids))
-            owners_map = dict()
-            for o in owners:
-                owners_map[o.id] = o.to_dict()
-            for c in comments:
-                _c = model_to_dict(c)
-                _c["owner"] = owners_map[_c["owner"]]
-                result.append(_c)
+                result.append(c.to_dict())
             return Response(
                 result,
                 status=HTTP_200_OK
@@ -48,10 +43,11 @@ class CommentView(APIView):
             serialized = CommentSerializer(data=request.data)
             serialized.is_valid(raise_exception=True)
             return Response(
-                model_to_dict(serialized.save()),
+                serialized.save().to_dict(),
                 status=HTTP_200_OK
             )
         except Exception as e:
+            logger.error(e)
             return Response(
                 f"[ERROR] While creating post: {str(e)}",
                 status=HTTP_400_BAD_REQUEST

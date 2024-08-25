@@ -28,3 +28,12 @@ class Comment(Model):
 
     objects = CommentQuerySet.as_manager()
 
+    def to_dict(self):
+        result = dict()
+        result["id"] = self.id
+        result["content"] = self.content.to_dict()
+        result["owner"] = self.owner.to_dict()
+        result["body"] = self.body
+        result["created_at"] = self.created_at
+        result["updated_at"] = self.updated_at
+        return result

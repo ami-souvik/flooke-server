@@ -31,6 +31,18 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
+PROJECT_APPS = [
+    'basic_auth.apps.AuthConfig',
+    'content.apps.ContentConfig',
+    'comment.apps.CommentConfig',
+    'chat.apps.ChatConfig'
+]
+EXTERNAL_APPS = [
+    'daphne',
+    'channels',
+    'corsheaders',
+    'rest_framework',
+]
 DJANGO_ESSENTIALS = [
     # 'django.contrib.admin',
     'django.contrib.auth',
@@ -39,21 +51,12 @@ DJANGO_ESSENTIALS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
-EXTERNAL_APPS = [
-    'channels',
-    'corsheaders',
-    'rest_framework',
-]
-PROJECT_APPS = [
-    'basic_auth.apps.AuthConfig',
-    'content.apps.ContentConfig',
-    'comment.apps.CommentConfig'
-]
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
-INSTALLED_APPS = DJANGO_ESSENTIALS + EXTERNAL_APPS + PROJECT_APPS
+INSTALLED_APPS = PROJECT_APPS + EXTERNAL_APPS + DJANGO_ESSENTIALS
 
 # Allowed origins
+CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWED_ORIGINS = os.environ.get('ALLOWED_ORIGINS').split(',') if os.environ.get('ALLOWED_ORIGINS', None) else []
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#std-setting-MIDDLEWARE
@@ -88,6 +91,14 @@ TEMPLATES = [
 ]
 
 ASGI_APPLICATION = 'app.asgi.application'
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
+}
 # WSGI_APPLICATION = 'app.wsgi.application'
 
 # Envrionment Variables

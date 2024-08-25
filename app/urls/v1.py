@@ -9,5 +9,6 @@ urlpatterns = [
     ('token/', TokenObtainPairView.as_view(), { "name": 'token_obtain_pair' }),
     ('token/refresh/', TokenRefreshView.as_view(), { "name": 'token_refresh' }),
     ('content/', include('content.urls')),
-    ('comment/', include('comment.urls'))
+    ('comment/', include('comment.urls')),
+    ('chat/', include('chat.urls'))
 ]

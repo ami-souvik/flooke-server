@@ -17,17 +17,8 @@ class ContentView(APIView):
         try:
             result = []
             posts = Content.objects.all().order_by('-created_at')[:10]
-            owner_ids = []
             for p in posts:
-                owner_ids.append(model_to_dict(p)["owner"])
-            owners = User.objects.filter(id__in=tuple(owner_ids))
-            owners_map = dict()
-            for o in owners:
-                owners_map[o.id] = o.to_dict()
-            for p in posts:
-                _p = model_to_dict(p)
-                _p["owner"] = owners_map[_p["owner"]]
-                result.append(_p)
+                result.append(p.to_dict())
             return Response(
                 result,
                 status=HTTP_200_OK

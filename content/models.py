@@ -22,3 +22,12 @@ class Content(Model):
 
     objects = ContentQuerySet.as_manager()
 
+    def to_dict(self):
+        result = dict()
+        result["id"] = self.id
+        result["owner"] = self.owner.to_dict()
+        result["title"] = self.title
+        result["body"] = self.body
+        result["created_at"] = self.created_at
+        result["updated_at"] = self.updated_at
+        return result
