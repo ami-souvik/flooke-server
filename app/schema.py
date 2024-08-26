@@ -13,7 +13,7 @@ class Query(basic_auth.schema.Query,
 
 
 class Mutation(content.schema.Mutation,
-                comment.schema.Query,
+                comment.schema.Mutation,
                 graphene.ObjectType):
     # Combine the mutations from different apps
     pass
