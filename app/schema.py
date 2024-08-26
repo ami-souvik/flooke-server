@@ -1,13 +1,20 @@
 import graphene
+import basic_auth.schema
 import content.schema
+import comment.schema
 
 
-class Query(content.schema.Query, graphene.ObjectType):
+class Query(basic_auth.schema.Query,
+            content.schema.Query,
+            comment.schema.Query,
+            graphene.ObjectType):
     # Combine the queries from different apps
     pass
 
 
-class Mutation(content.schema.Mutation, graphene.ObjectType):
+class Mutation(content.schema.Mutation,
+                comment.schema.Query,
+                graphene.ObjectType):
     # Combine the mutations from different apps
     pass
 

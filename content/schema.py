@@ -1,12 +1,20 @@
 import graphene
-from graphene_django import DjangoObjectType
+from graphene_django import DjangoObjectType, DjangoListField
 from .models import Content
-
+from comment.schema import CommentType
+from comment.models import Comment
 
 class ContentType(DjangoObjectType):
     class Meta:
         model = Content
         fields = "__all__"
+    
+    comments = DjangoListField(CommentType, last=graphene.Int(), offset=graphene.Int())
+
+    @staticmethod
+    def resolve_comments(self, info, last=10, offset=0):
+        return Comment.objects.all().filter(content=self.id)\
+                .order_by('-created_at')[offset:last]
 
 
 class CreateContent(graphene.Mutation):
@@ -30,7 +38,6 @@ class CreateContent(graphene.Mutation):
         :param author_id: Get the author object from the database
         :return: A createcontent object
         """
-        print(info.context)
         user = info.context.META["context"]["user"]
         content = Content(
             owner=user,
@@ -108,17 +115,24 @@ class DeleteContent(graphene.Mutation):
 
 
 class Query(graphene.ObjectType):
-    contents = graphene.List(ContentType)
+    contents = graphene.List(ContentType, content_id=graphene.ID(), last=graphene.Int(), offset=graphene.Int())
 
-    def resolve_contents(self, info):
+    def resolve_contents(self, info, content_id=None, last=10, offset=0):
         """
         The resolve_contents function is a resolver. It's responsible for retrieving the contents from the database and returning them to GraphQL.
 
-        :param self: Refer to the current instance of a class
+        :param self: Refers to the current instance of a class
         :param info: Pass along the context of the query
-        :return: All content objects from the database
+        :param content_id: Refers to the specific content object's id which needs to be returned
+        :param last: Refers to the count of last records need to be returned
+        :param offset: Refers to the count of how many records has already been returned
+        :return: Last records starting from offset to last from the database
         """
-        return Content.objects.all()
+        if not content_id:
+            return Content.objects.all()\
+                .order_by('-created_at')[offset:last]
+        return Content.objects.all().filter(content=content_id)\
+                .order_by('-created_at')[offset:last]
 
 
 class Mutation(graphene.ObjectType):
