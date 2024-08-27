@@ -6,4 +6,7 @@ Heavility inspired from:
 ##### An enterprise oriented social networkhttps://esketchers.com/django-websockets-a-complete-beginners-guide/
 
 
--https://esketchers.com/django-websockets-a-complete-beginners-guide/
+- https://esketchers.com/django-websockets-a-complete-beginners-guide/
+
+AWS CI-CD for your Django app with AWS CodePipeline
+- https://blog.clairvoyantsoft.com/aws-ci-cd-for-your-django-app-with-aws-codepipeline-aafec23f9e55

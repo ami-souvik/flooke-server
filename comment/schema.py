@@ -119,7 +119,7 @@ class Query(graphene.ObjectType):
         :return: Last records starting from offset to last from the database
         """
         return Comment.objects.all().filter(content=content_id)\
-                .order_by('-created_at')[offset:last]
+                .order_by('-created_at')[offset:offset+last]
 
 
 class Mutation(graphene.ObjectType):

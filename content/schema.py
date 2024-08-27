@@ -14,7 +14,7 @@ class ContentType(DjangoObjectType):
     @staticmethod
     def resolve_comments(self, info, last=10, offset=0):
         return Comment.objects.all().filter(content=self.id)\
-                .order_by('-created_at')[offset:last]
+                .order_by('-created_at')[offset:offset+last]
 
 
 class CreateContent(graphene.Mutation):
@@ -130,9 +130,9 @@ class Query(graphene.ObjectType):
         """
         if not content_id:
             return Content.objects.all()\
-                .order_by('-created_at')[offset:last]
+                .order_by('-created_at')[offset:offset+last]
         return Content.objects.all().filter(content=content_id)\
-                .order_by('-created_at')[offset:last]
+                .order_by('-created_at')[offset:offset+last]
 
 
 class Mutation(graphene.ObjectType):

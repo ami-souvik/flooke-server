@@ -35,7 +35,8 @@ PROJECT_APPS = [
     'basic_auth.apps.AuthConfig',
     'content.apps.ContentConfig',
     'comment.apps.CommentConfig',
-    'chat.apps.ChatConfig'
+    'chat.apps.ChatConfig',
+    'utils.apps.UtilsConfig'
 ]
 EXTERNAL_APPS = [
     'daphne',
