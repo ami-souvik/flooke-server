@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.utils import timezone
 from django.db.models import Model, ForeignKey, CharField, DateTimeField, CASCADE
 from django.db.models.query import QuerySet
 
@@ -21,6 +22,12 @@ class Content(Model):
     updated_at = DateTimeField()
 
     objects = ContentQuerySet.as_manager()
+
+    def save(self, *args, **kwargs):
+        if not self.created_at:
+            self.created_at = timezone.now()
+        self.updated_at = timezone.now()
+        super().save(*args, **kwargs)
 
     def to_dict(self):
         result = dict()
