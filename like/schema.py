@@ -52,9 +52,17 @@ class DeleteLike(graphene.Mutation):
         return DeleteLike(success=True)
 
 
+class Query(graphene.ObjectType):
+    likes = graphene.List(LikeType, content=graphene.ID(), last=graphene.Int(), offset=graphene.Int())
+
+    def resolve_likes(self, info, content, last=10, offset=0):
+        return Like.objects.filter(content=content)\
+                .order_by('-created_at')[offset:offset+last]
+
+
 class Mutation(graphene.ObjectType):
     create_like = CreateLike.Field()
     delete_like = DeleteLike.Field()
 
 
-schema = graphene.Schema(mutation=Mutation)
+schema = graphene.Schema(query=Query, mutation=Mutation)

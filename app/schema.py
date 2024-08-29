@@ -10,6 +10,7 @@ class Query(basic_auth.schema.Query,
             basic_auth.schemas.current.Query,
             content.schema.Query,
             comment.schema.Query,
+            like.schema.Query,
             graphene.ObjectType):
     # Combine the queries from different apps
     pass
