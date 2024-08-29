@@ -2,20 +2,32 @@ import graphene
 from graphene_django import DjangoObjectType, DjangoListField
 from .models import Content
 from comment.schema import CommentType
-from comment.models import Comment
+from like.schema import LikeType
+from like.models import Like
 
 class ContentType(DjangoObjectType):
     class Meta:
         model = Content
         fields = "__all__"
+
+    liked = DjangoListField(LikeType)
     
+    @staticmethod
+    def resolve_liked(self, info):
+        user = info.context.META["context"]["user"]
+        return Like.objects.filter(user=user, content=self)
+
     comments = DjangoListField(CommentType, last=graphene.Int(), offset=graphene.Int())
 
     @staticmethod
     def resolve_comments(self, info, last=10, offset=0):
-        return Comment.objects.all().filter(content=self.id)\
-                .order_by('-created_at')[offset:offset+last]
+        return self.comments.order_by('-created_at')[offset:offset+last]
 
+    likes = DjangoListField(LikeType, last=graphene.Int(), offset=graphene.Int())
+
+    @staticmethod
+    def resolve_likes(self, info, last=10, offset=0):
+        return self.likes.order_by('-created_at')[offset:offset+last]
 
 class CreateContent(graphene.Mutation):
     class Arguments:
