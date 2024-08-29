@@ -118,7 +118,7 @@ class Query(graphene.ObjectType):
         :param offset: Refers to the count of how many records has already been returned
         :return: Last records starting from offset to last from the database
         """
-        return Comment.objects.all().filter(content=content_id)\
+        return Comment.objects.filter(content=content_id)\
                 .order_by('-created_at')[offset:offset+last]
 
 
