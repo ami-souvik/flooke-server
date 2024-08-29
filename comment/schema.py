@@ -105,9 +105,9 @@ class DeleteComment(graphene.Mutation):
 
 
 class Query(graphene.ObjectType):
-    comments = graphene.List(CommentType, content_id=graphene.ID(), last=graphene.Int(), offset=graphene.Int())
+    comments = graphene.List(CommentType, content=graphene.ID(), last=graphene.Int(), offset=graphene.Int())
 
-    def resolve_comments(self, info, content_id, last=10, offset=0):
+    def resolve_comments(self, info, content, last=10, offset=0):
         """
         The resolve_comments function is a resolver. It's responsible for retrieving
         the comments under a content from the database and returning them to GraphQL.
@@ -118,7 +118,7 @@ class Query(graphene.ObjectType):
         :param offset: Refers to the count of how many records has already been returned
         :return: Last records starting from offset to last from the database
         """
-        return Comment.objects.filter(content=content_id)\
+        return Comment.objects.filter(content=content)\
                 .order_by('-created_at')[offset:offset+last]
 
 

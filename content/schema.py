@@ -17,11 +17,23 @@ class ContentType(DjangoObjectType):
         user = info.context.META["context"]["user"]
         return Like.objects.filter(user=user, content=self)
 
+    comments_count = graphene.Int()
+
+    @staticmethod
+    def resolve_comments_count(self, info):
+        return self.comments.count()
+
     comments = DjangoListField(CommentType, last=graphene.Int(), offset=graphene.Int())
 
     @staticmethod
     def resolve_comments(self, info, last=10, offset=0):
         return self.comments.order_by('-created_at')[offset:offset+last]
+
+    likes_count = graphene.Int()
+
+    @staticmethod
+    def resolve_likes_count(self, info):
+        return self.likes.count()
 
     likes = DjangoListField(LikeType, last=graphene.Int(), offset=graphene.Int())
 
