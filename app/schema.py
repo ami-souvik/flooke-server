@@ -3,6 +3,7 @@ import basic_auth.schema
 import basic_auth.schemas.current
 import content.schema
 import comment.schema
+import like.schema
 
 
 class Query(basic_auth.schema.Query,
@@ -17,6 +18,7 @@ class Query(basic_auth.schema.Query,
 class Mutation(basic_auth.schemas.current.Mutation,
                 content.schema.Mutation,
                 comment.schema.Mutation,
+                like.schema.Mutation,
                 graphene.ObjectType):
     # Combine the mutations from different apps
     pass

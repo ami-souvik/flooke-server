@@ -35,6 +35,7 @@ PROJECT_APPS = [
     'basic_auth.apps.AuthConfig',
     'content.apps.ContentConfig',
     'comment.apps.CommentConfig',
+    'like.apps.LikeConfig',
     'chat.apps.ChatConfig',
     'utils.apps.UtilsConfig'
 ]

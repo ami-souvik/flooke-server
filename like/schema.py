@@ -1,6 +1,8 @@
 import graphene
 from graphene_django import DjangoObjectType
 from .models import Like
+from content.models import Content
+from comment.models import Comment
 
 class LikeType(DjangoObjectType):
     class Meta:
@@ -21,6 +23,10 @@ class CreateLike(graphene.Mutation):
         if content and comment:
             raise Exception("A Like can either be related to content or comment")
         user = info.context.META["context"]["user"]
+        if content:
+            content=Content.objects.get(id=content)
+        if comment:
+            content=Comment.objects.get(id=comment)
         like = Like(
             user=user,
             content=content,
