@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.utils import timezone
 from django.db.models import Model, ForeignKey, CharField, DateTimeField, CASCADE
 from django.db.models.query import QuerySet
 
@@ -12,13 +13,13 @@ class Comment(Model):
     owner = ForeignKey(
         settings.AUTH_USER_MODEL,
         null=False,
-        related_name="commentor",
+        related_name="comments",
         on_delete=CASCADE,
     )
     content = ForeignKey(
         'content.Content',
         null=False,
-        related_name="article",
+        related_name="comments",
         on_delete=CASCADE,
     )
     body = CharField(max_length=1024, null=False)
@@ -27,6 +28,12 @@ class Comment(Model):
     updated_at = DateTimeField()
 
     objects = CommentQuerySet.as_manager()
+
+    def save(self, *args, **kwargs):
+        if not self.created_at:
+            self.created_at = timezone.now()
+        self.updated_at = timezone.now()
+        super().save(*args, **kwargs)
 
     def to_dict(self):
         result = dict()

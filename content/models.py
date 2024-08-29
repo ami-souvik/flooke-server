@@ -12,7 +12,7 @@ class Content(Model):
     owner = ForeignKey(
         settings.AUTH_USER_MODEL,
         null=False,
-        related_name="creator",
+        related_name="contents",
         on_delete=CASCADE,
     )
     title = CharField(max_length=255, null=False)
