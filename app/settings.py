@@ -36,7 +36,7 @@ PROJECT_APPS = [
     'content.apps.ContentConfig',
     'comment.apps.CommentConfig',
     'like.apps.LikeConfig',
-    'chat.apps.ChatConfig',
+    'conversation.apps.ConversationConfig',
     'utils.apps.UtilsConfig'
 ]
 EXTERNAL_APPS = [
@@ -183,7 +183,7 @@ AUTHENTICATION_BACKENDS = ['basic_auth.backends.ModelBackend']
 # Simple jwt authentication config
 SIMPLE_JWT = {
     # It will work instead of the default serializer(TokenObtainPairSerializer).
-    "TOKEN_OBTAIN_SERIALIZER": "basic_auth.serializers.ObtainTokenSerializer",
+    # "TOKEN_OBTAIN_SERIALIZER": "basic_auth.serializers.ObtainTokenSerializer",
     # "TOKEN_REFRESH_SERIALIZER": 'basic_auth.serializers.RefreshTokenSerializer'
 }
 
