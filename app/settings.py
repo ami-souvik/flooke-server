@@ -32,11 +32,13 @@ ALLOWED_HOSTS = []
 
 # Application definition
 PROJECT_APPS = [
-    'basic_auth.apps.AuthConfig',
+    'user.apps.AuthConfig',
     'content.apps.ContentConfig',
     'comment.apps.CommentConfig',
-    'like.apps.LikeConfig',
+    'feedback.apps.FeedbackConfig',
     'conversation.apps.ConversationConfig',
+    'community.apps.CommunityConfig',
+    'follow.apps.FollowConfig',
     'utils.apps.UtilsConfig'
 ]
 EXTERNAL_APPS = [
@@ -169,7 +171,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
-AUTH_USER_MODEL = "basic_auth.User"
+AUTH_USER_MODEL = "user.User"
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -178,13 +180,13 @@ REST_FRAMEWORK = {
 }
 
 # Personalized authentication backend
-AUTHENTICATION_BACKENDS = ['basic_auth.backends.ModelBackend']
+AUTHENTICATION_BACKENDS = ['user.backends.ModelBackend']
 
 # Simple jwt authentication config
 SIMPLE_JWT = {
     # It will work instead of the default serializer(TokenObtainPairSerializer).
-    # "TOKEN_OBTAIN_SERIALIZER": "basic_auth.serializers.ObtainTokenSerializer",
-    # "TOKEN_REFRESH_SERIALIZER": 'basic_auth.serializers.RefreshTokenSerializer'
+    # "TOKEN_OBTAIN_SERIALIZER": "user.serializers.ObtainTokenSerializer",
+    # "TOKEN_REFRESH_SERIALIZER": 'user.serializers.RefreshTokenSerializer'
 }
 
 GRAPHENE = {

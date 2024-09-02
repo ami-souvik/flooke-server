@@ -1,7 +1,7 @@
 import graphene
 from graphene_django import DjangoObjectType
 from django.db.models import Q
-from basic_auth.models import User
+from user.models import User
 
 class CurrentUserType(DjangoObjectType):
     class Meta:

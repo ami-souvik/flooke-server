@@ -14,12 +14,3 @@ class User(AbstractUser):
             self.created_at = timezone.now()
         self.updated_at = timezone.now()
         super().save(*args, **kwargs)
-    
-    def to_dict(self):
-        result = dict()
-        result["emoji_unicode"] = self.emoji_unicode
-        result["username"] = self.username
-        result["first_name"] = self.first_name
-        result["last_name"] = self.last_name
-        result["email"] = self.email
-        return result

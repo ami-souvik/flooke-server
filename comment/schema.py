@@ -11,30 +11,28 @@ class CommentType(DjangoObjectType):
 
 class CreateComment(graphene.Mutation):
     class Arguments:
-        content = graphene.ID(required=True)
+        id = graphene.ID(required=True)
+        what = graphene.ID(required=True)
         body = graphene.String(required=True)
 
     comment = graphene.Field(CommentType)
 
-    def mutate(self, info, content, body):
-        """
-        The mutate function is the function that will be called when a client
-        makes a request to this mutation. It takes in four arguments:
-        self, info, title and comment. The first two are required by all mutations;
-        the last two are the arguments we defined in our CreateCommentInput class.
+    def mutate(self, info, id, what, body):
+        if what != "comment" and what != "content" :
+            raise Exception("A Comment needs to be related to a content or to a comment")
 
-        :param self: Access the object's attributes and methods
-        :param info: Access the context of the request
-        :param title: Create a new comment with the title provided
-        :param comment: Pass the comment of the comment
-        :param author_id: Get the author object from the database
-        :return: A createcomment object
-        """
         user = info.context.META["context"]["user"]
-        content = Content.objects.get(id=content)
+        content = None
+        comment = None
+        if what == "content":
+            content=Content.objects.get(id=id)
+        if what == "comment":
+            comment=Comment.objects.get(id=id)
+
         comment = Comment(
             owner=user,
             content=content,
+            comment=comment,
             body=body
         )
         comment.save()
@@ -44,25 +42,11 @@ class CreateComment(graphene.Mutation):
 class UpdateComment(graphene.Mutation):
     class Arguments:
         id = graphene.ID(required=True)
-        body = graphene.String()
+        body = graphene.String(required=True)
 
     comment = graphene.Field(CommentType)
 
     def mutate(self, info, id, body=None):
-        """
-        The mutate function is the function that will be called when a client
-        calls this mutation. It takes in four arguments: self, info, id and title.
-        The first two are required by all mutations and the last two are specific to this mutation.
-        The self argument refers to the class itself (UpdateComment) while info contains information about
-        the query context such as authentication credentials or access control lists.
-
-        :param self: Pass the instance of the class
-        :param info: Access the context of the request
-        :param id: Find the comment we want to update
-        :param title: Update the title of a comment
-        :param comment: Update the comment of a comment
-        :return: An instance of the updatecomment class, which is a subclass of mutation
-        """
         try:
             comment = Comment.objects.get(pk=id)
         except Comment.DoesNotExist:
@@ -82,19 +66,6 @@ class DeleteComment(graphene.Mutation):
     success = graphene.Boolean()
 
     def mutate(self, info, id):
-        """
-        The mutate function is the function that will be called when a client
-        calls this mutation. It takes in four arguments: self, info, id. The first
-        argument is the object itself (the class instance). The second argument is
-        information about the query context and user making this request. We don't
-        need to use it here so we'll just pass it along as-is to our model method.
-        The third argument is an ID of a comment we want to delete.
-
-        :param self: Represent the instance of the class
-        :param info: Access the context of the query
-        :param id: Find the comment that is to be deleted
-        :return: A deletecomment object, which is the return type of the mutation
-        """
         try:
             comment = Comment.objects.get(pk=id)
         except Comment.DoesNotExist:

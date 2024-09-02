@@ -2,46 +2,45 @@ from django.conf import settings
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 from django.db.models import Model, ForeignKey, CharField, DateTimeField, CASCADE
-from django.db.models.query import QuerySet
 
-class CommentQuerySet(QuerySet):
-    """Personalized queryset created to improve model usability"""
-    def all_by_content(self, content_id):
-        return self.filter(content=content_id)
+vote_choices = (
+    ("u", "Up"),
+    ("d", "Down")
+)
 
-class Comment(Model):
-    """Content model contains user posted content"""
-    owner = ForeignKey(
+class Feedback(Model):
+    """Feedback model contains user feedback contents or comments"""
+    user = ForeignKey(
         settings.AUTH_USER_MODEL,
         null=False,
-        related_name="comments",
+        related_name="feedbacks",
         on_delete=CASCADE,
     )
     content = ForeignKey(
         'content.Content',
         null=True,
-        related_name="comments",
+        related_name="feedbacks",
         on_delete=CASCADE,
     )
     comment = ForeignKey(
         'comment.Comment',
         null=True,
-        related_name="comments",
+        related_name="feedbacks",
         on_delete=CASCADE,
     )
-    body = CharField(max_length=1024, null=False)
+    vote = CharField(
+        max_length=1,
+        choices=vote_choices
+    )
 
     created_at = DateTimeField()
     updated_at = DateTimeField()
 
-    objects = CommentQuerySet.as_manager()
-
-
     def validate_unique(self, exclude=None):
-        if Comment.objects.filter(owner=self.owner, content=self.content, comment=self.comment)\
+        if Feedback.objects.filter(user=self.user, content=self.content, comment=self.comment)\
             .exists():
-            raise ValidationError("Comment already exist")
-        super(Comment, self).validate_unique(exclude=exclude)
+            raise ValidationError("Feedback already exist")
+        super(Feedback, self).validate_unique(exclude=exclude)
 
     def save(self, *args, **kwargs):
         self.validate_unique()

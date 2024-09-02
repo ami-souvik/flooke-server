@@ -28,13 +28,3 @@ class Content(Model):
             self.created_at = timezone.now()
         self.updated_at = timezone.now()
         super().save(*args, **kwargs)
-
-    def to_dict(self):
-        result = dict()
-        result["id"] = self.id
-        result["owner"] = self.owner.to_dict()
-        result["title"] = self.title
-        result["body"] = self.body
-        result["created_at"] = self.created_at
-        result["updated_at"] = self.updated_at
-        return result

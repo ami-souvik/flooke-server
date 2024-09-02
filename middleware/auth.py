@@ -1,6 +1,6 @@
 import jwt
 from django.conf import settings
-from basic_auth.models import User
+from user.models import User
 from django.forms.models import model_to_dict
 from jwt.exceptions import ExpiredSignatureError
 from rest_framework.response import Response

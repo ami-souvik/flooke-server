@@ -2,7 +2,7 @@ import os
 from itertools import batched
 from django.utils import timezone
 from django.core.management.base import BaseCommand, CommandError
-from basic_auth.models import User
+from user.models import User
 from django.contrib.auth.hashers import make_password
 
 

@@ -2,25 +2,25 @@ import graphene
 from graphene_django import DjangoObjectType, DjangoListField
 from .models import Content
 from comment.schema import CommentType
-from like.schema import LikeType
-from like.models import Like
+from feedback.schema import FeedbackType
+from feedback.models import Feedback
 
 class ContentType(DjangoObjectType):
     class Meta:
         model = Content
         fields = "__all__"
 
-    liked = DjangoListField(LikeType)
+    feedback = DjangoListField(FeedbackType)
     
     @staticmethod
-    def resolve_liked(self, info):
+    def resolve_feedback(self, info):
         user = info.context.META["context"]["user"]
-        return Like.objects.filter(user=user, content=self)
+        return Feedback.objects.filter(user=user, content=self)
 
-    comments_count = graphene.Int()
+    comment_count = graphene.Int()
 
     @staticmethod
-    def resolve_comments_count(self, info):
+    def resolve_comment_count(self, info):
         return self.comments.count()
 
     comments = DjangoListField(CommentType, last=graphene.Int(), offset=graphene.Int())
@@ -29,17 +29,23 @@ class ContentType(DjangoObjectType):
     def resolve_comments(self, info, last=10, offset=0):
         return self.comments.order_by('-created_at')[offset:offset+last]
 
-    likes_count = graphene.Int()
+    upvote_count = graphene.Int()
 
     @staticmethod
-    def resolve_likes_count(self, info):
-        return self.likes.count()
+    def resolve_upvote_count(self, info):
+        return self.feedbacks.filter(vote="u").count()
 
-    likes = DjangoListField(LikeType, last=graphene.Int(), offset=graphene.Int())
+    downvote_count = graphene.Int()
 
     @staticmethod
-    def resolve_likes(self, info, last=10, offset=0):
-        return self.likes.order_by('-created_at')[offset:offset+last]
+    def resolve_downvote_count(self, info):
+        return self.feedbacks.filter(vote="d").count()
+
+    feedbacks = DjangoListField(FeedbackType, last=graphene.Int(), offset=graphene.Int())
+
+    @staticmethod
+    def resolve_feedbacks(self, info, last=10, offset=0):
+        return self.feedbacks.order_by('-created_at')[offset:offset+last]
 
 class CreateContent(graphene.Mutation):
     class Arguments:
