@@ -21,7 +21,7 @@ class CreateFeedback(graphene.Mutation):
     def mutate(self, info, id, what, vote):
         if what != "comment" and what != "content":
             raise Exception("A Feedback needs to be related to a content or to a comment")
-        if vote != "u" and vote != "d":
+        if vote != "U" and vote != "D":
             raise Exception("A Feedback can only be of type upvote or downvote")
         user = info.context.META["context"]["user"]
         content = None
@@ -30,12 +30,18 @@ class CreateFeedback(graphene.Mutation):
             content=Content.objects.get(id=id)
         if what == "comment":
             comment=Comment.objects.get(id=id)
-        feedback = Feedback(
+        feedback = Feedback.objects.filter(
             user=user,
             content=content,
-            comment=comment,
-            vote=vote
-        )
+            comment=comment
+        ).first()
+        if not feedback:
+            feedback = Feedback(
+                user=user,
+                content=content,
+                comment=comment
+            )
+        feedback.vote = vote
         feedback.save()
         return CreateFeedback(feedback=feedback)
 

@@ -4,10 +4,10 @@ services:
     image: redis:latest
     restart: always
     ports:
-      - "6378:6378"
+      - "6379:6379"
     environment:
       - REDIS_PASSWORD=example
-      - REDIS_PORT=6378
+      - REDIS_PORT=6379
       - REDIS_DATABASES=16
 
   db:

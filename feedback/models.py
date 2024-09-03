@@ -4,8 +4,8 @@ from django.core.exceptions import ValidationError
 from django.db.models import Model, ForeignKey, CharField, DateTimeField, CASCADE
 
 vote_choices = (
-    ("u", "Up"),
-    ("d", "Down")
+    ("U", "Up"),
+    ("D", "Down")
 )
 
 class Feedback(Model):
@@ -37,7 +37,7 @@ class Feedback(Model):
     updated_at = DateTimeField()
 
     def validate_unique(self, exclude=None):
-        if Feedback.objects.filter(user=self.user, content=self.content, comment=self.comment)\
+        if not self.id and Feedback.objects.filter(user=self.user, content=self.content, comment=self.comment)\
             .exists():
             raise ValidationError("Feedback already exist")
         super(Feedback, self).validate_unique(exclude=exclude)

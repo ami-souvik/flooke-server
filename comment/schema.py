@@ -14,13 +14,13 @@ class CommentType(DjangoObjectType):
 
     @staticmethod
     def resolve_upvote_count(self, info):
-        return self.feedbacks.filter(vote="u").count()
+        return self.feedbacks.filter(vote="U").count()
 
     downvote_count = graphene.Int()
 
     @staticmethod
     def resolve_downvote_count(self, info):
-        return self.feedbacks.filter(vote="d").count()
+        return self.feedbacks.filter(vote="D").count()
 
     feedback = graphene.Field(FeedbackType)
     

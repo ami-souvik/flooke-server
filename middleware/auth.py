@@ -12,7 +12,9 @@ class ApplicationAuthMiddleware:
 
     def __call__(self, request):
         # try:
-            if '/api/v1/token/' not in request.path:
+            print(request.path)
+            if '/api/v1/token/' not in request.path and\
+                '/api/v1/chat/' not in request.path:
                 auth_token = request.headers.get("Authorization", None)
                 auth_token = auth_token.replace("Bearer ", "").strip()
                 payload = jwt.decode(auth_token,
