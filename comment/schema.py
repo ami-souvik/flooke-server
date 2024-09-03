@@ -1,18 +1,45 @@
 import graphene
-from graphene_django import DjangoObjectType
+from graphene_django import DjangoObjectType, DjangoListField
 from .models import Comment
 from content.models import Content
+from feedback.models import Feedback
+from feedback.schema import FeedbackType
 
 class CommentType(DjangoObjectType):
     class Meta:
         model = Comment
         fields = "__all__"
 
+    upvote_count = graphene.Int()
+
+    @staticmethod
+    def resolve_upvote_count(self, info):
+        return self.feedbacks.filter(vote="u").count()
+
+    downvote_count = graphene.Int()
+
+    @staticmethod
+    def resolve_downvote_count(self, info):
+        return self.feedbacks.filter(vote="d").count()
+
+    feedback = graphene.Field(FeedbackType)
+    
+    @staticmethod
+    def resolve_feedback(self, info):
+        user = info.context.META["context"]["user"]
+        return Feedback.objects.filter(user=user, comment=self).first()
+
+    feedbacks = DjangoListField(FeedbackType, last=graphene.Int(), offset=graphene.Int())
+
+    @staticmethod
+    def resolve_feedbacks(self, info, last=10, offset=0):
+        return self.feedbacks.order_by('-created_at')[offset:offset+last]
+
 
 class CreateComment(graphene.Mutation):
     class Arguments:
         id = graphene.ID(required=True)
-        what = graphene.ID(required=True)
+        what = graphene.String(required=True)
         body = graphene.String(required=True)
 
     comment = graphene.Field(CommentType)
@@ -28,6 +55,8 @@ class CreateComment(graphene.Mutation):
             content=Content.objects.get(id=id)
         if what == "comment":
             comment=Comment.objects.get(id=id)
+            comment.has_reply = True
+            comment.save()
 
         comment = Comment(
             owner=user,
@@ -68,6 +97,9 @@ class DeleteComment(graphene.Mutation):
     def mutate(self, info, id):
         try:
             comment = Comment.objects.get(pk=id)
+            if comment.comment:
+                comment.comment.has_reply = False
+                comment.comment.save()
         except Comment.DoesNotExist:
             raise Exception("Comment not found")
 
@@ -76,21 +108,17 @@ class DeleteComment(graphene.Mutation):
 
 
 class Query(graphene.ObjectType):
-    comments = graphene.List(CommentType, content=graphene.ID(), last=graphene.Int(), offset=graphene.Int())
+    comments = graphene.List(CommentType, id=graphene.ID(required=True), what=graphene.String(required=True),
+                             last=graphene.Int(), offset=graphene.Int())
 
-    def resolve_comments(self, info, content, last=10, offset=0):
-        """
-        The resolve_comments function is a resolver. It's responsible for retrieving
-        the comments under a content from the database and returning them to GraphQL.
-
-        :param self: Refers to the current instance of a class
-        :param info: Pass along the context of the query
-        :param last: Refers to the count of last records needs to be returned
-        :param offset: Refers to the count of how many records has already been returned
-        :return: Last records starting from offset to last from the database
-        """
-        return Comment.objects.filter(content=content)\
+    def resolve_comments(self, info, id, what, last=10, offset=0):
+        if what == "content":
+            return Comment.objects.filter(content=id)\
                 .order_by('-created_at')[offset:offset+last]
+        if what == "comment":
+            return Comment.objects.filter(comment=id)\
+                .order_by('-created_at')[offset:offset+last]
+        raise Exception("A Comment needs to be related to a content or to a comment")
 
 
 class Mutation(graphene.ObjectType):

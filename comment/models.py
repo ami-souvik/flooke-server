@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.utils import timezone
 from django.core.exceptions import ValidationError
-from django.db.models import Model, ForeignKey, CharField, DateTimeField, CASCADE
+from django.db.models import Model, ForeignKey, BooleanField, CharField, DateTimeField, CASCADE
 from django.db.models.query import QuerySet
 
 class CommentQuerySet(QuerySet):
@@ -30,6 +30,7 @@ class Comment(Model):
         on_delete=CASCADE,
     )
     body = CharField(max_length=1024, null=False)
+    has_reply = BooleanField(null=False, default=False)
 
     created_at = DateTimeField()
     updated_at = DateTimeField()
@@ -38,7 +39,8 @@ class Comment(Model):
 
 
     def validate_unique(self, exclude=None):
-        if Comment.objects.filter(owner=self.owner, content=self.content, comment=self.comment)\
+        print(self.content, self.comment)
+        if not self.id and Comment.objects.filter(owner=self.owner, content=self.content, comment=self.comment)\
             .exists():
             raise ValidationError("Comment already exist")
         super(Comment, self).validate_unique(exclude=exclude)

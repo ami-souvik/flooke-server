@@ -10,12 +10,12 @@ class ContentType(DjangoObjectType):
         model = Content
         fields = "__all__"
 
-    feedback = DjangoListField(FeedbackType)
+    feedback = graphene.Field(FeedbackType)
     
     @staticmethod
     def resolve_feedback(self, info):
         user = info.context.META["context"]["user"]
-        return Feedback.objects.filter(user=user, content=self)
+        return Feedback.objects.filter(user=user, content=self).first()
 
     comment_count = graphene.Int()
 
