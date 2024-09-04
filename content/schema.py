@@ -161,8 +161,7 @@ class Query(graphene.ObjectType):
         if not content_id:
             return Content.objects.all()\
                 .order_by('-created_at')[offset:offset+last]
-        return Content.objects.all().filter(content=content_id)\
-                .order_by('-created_at')[offset:offset+last]
+        return [Content.objects.get(id=content_id)]
 
 
 class Mutation(graphene.ObjectType):
