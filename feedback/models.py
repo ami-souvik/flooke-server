@@ -48,3 +48,15 @@ class Feedback(Model):
             self.created_at = timezone.now()
         self.updated_at = timezone.now()
         super().save(*args, **kwargs)
+
+    def to_dict(self):
+        _dict = dict(
+            id=self.id,
+            user=self.user.id,
+            vote=self.vote
+        )
+        if self.content:
+            _dict["content"] = self.content.id
+        if self.comment:
+            _dict["comment"] = self.comment.id
+        return _dict
