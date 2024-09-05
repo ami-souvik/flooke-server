@@ -34,6 +34,18 @@ class CommentType(DjangoObjectType):
     @staticmethod
     def resolve_feedbacks(self, info, last=10, offset=0):
         return self.feedbacks.order_by('-created_at')[offset:offset+last]
+    
+    comment_count = graphene.Int()
+
+    @staticmethod
+    def resolve_comment_count(self, info):
+        return self.comments.count()
+
+    comments = DjangoListField(lambda: CommentType, last=graphene.Int(), offset=graphene.Int())
+
+    @staticmethod
+    def resolve_comments(self, info, last=10, offset=0):
+        return self.comments.order_by('-created_at')[offset:offset+last]
 
 
 class CreateComment(graphene.Mutation):
