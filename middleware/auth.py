@@ -12,9 +12,7 @@ class ApplicationAuthMiddleware:
 
     def __call__(self, request):
         # try:
-            print(request.path)
-            if '/api/v1/token/' not in request.path and\
-                '/api/v1/chat/' not in request.path:
+            if '/api/v1/token/' not in request.path:
                 auth_token = request.headers.get("Authorization", None)
                 auth_token = auth_token.replace("Bearer ", "").strip()
                 payload = jwt.decode(auth_token,
@@ -22,11 +20,7 @@ class ApplicationAuthMiddleware:
                                     algorithms=["HS256"],
                                     options={'verify_signature': True})
                 user = User.objects.get(id=payload["user_id"])
-                req_meta = dict(request.META)
-                req_meta['context'] = {
-                    "user": user
-                }
-                request.META = req_meta
+                request.user = user
             response = self.get_response(request)
             return response
         # except ExpiredSignatureError as e:

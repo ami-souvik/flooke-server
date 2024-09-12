@@ -26,7 +26,7 @@ class CommentType(DjangoObjectType):
     
     @staticmethod
     def resolve_feedback(self, info):
-        user = info.context.META["context"]["user"]
+        user = info.context.user
         return Feedback.objects.filter(user=user, comment=self).first()
 
     feedbacks = DjangoListField(FeedbackType, last=graphene.Int(), offset=graphene.Int())
@@ -60,7 +60,7 @@ class CreateComment(graphene.Mutation):
         if what != "comment" and what != "content" :
             raise Exception("A Comment needs to be related to a content or to a comment")
 
-        user = info.context.META["context"]["user"]
+        user = info.context.user
         content = None
         comment = None
         if what == "content":

@@ -2,6 +2,7 @@ import graphene
 from graphene_django import DjangoObjectType, DjangoListField
 from .models import Content
 from comment.schema import CommentType
+from comment.models import Comment
 from feedback.schema import FeedbackType
 from feedback.models import Feedback
 
@@ -14,7 +15,7 @@ class ContentType(DjangoObjectType):
     
     @staticmethod
     def resolve_feedback(self, info):
-        user = info.context.META["context"]["user"]
+        user = info.context.user
         return Feedback.objects.filter(user=user, content=self).first()
 
     comment_count = graphene.Int()
@@ -23,11 +24,15 @@ class ContentType(DjangoObjectType):
     def resolve_comment_count(self, info):
         return self.comments.count()
 
-    comments = DjangoListField(CommentType, last=graphene.Int(), offset=graphene.Int())
+    comments = DjangoListField(CommentType, comment=graphene.ID(), last=graphene.Int(), offset=graphene.Int())
 
     @staticmethod
-    def resolve_comments(self, info, last=10, offset=0):
-        return self.comments.order_by('-created_at')[offset:offset+last]
+    def resolve_comments(self, info, comment, last=10, offset=0):
+        try:
+            comment = Comment.objects.get(id=comment)
+            return [comment]
+        except Comment.DoesNotExist:
+            return self.comments.order_by('-created_at')[offset:offset+last]
 
     upvote_count = graphene.Int()
 
@@ -68,7 +73,7 @@ class CreateContent(graphene.Mutation):
         :param author_id: Get the author object from the database
         :return: A createcontent object
         """
-        user = info.context.META["context"]["user"]
+        user = info.context.user
         content = Content(
             owner=user,
             title=title,
@@ -145,9 +150,9 @@ class DeleteContent(graphene.Mutation):
 
 
 class Query(graphene.ObjectType):
-    contents = graphene.List(ContentType, content_id=graphene.ID(), last=graphene.Int(), offset=graphene.Int())
-
-    def resolve_contents(self, info, content_id=None, last=10, offset=0):
+    contents = graphene.List(ContentType, content=graphene.ID(), last=graphene.Int(), offset=graphene.Int())
+    
+    def resolve_contents(self, info, content=None, last=10, offset=0):
         """
         The resolve_contents function is a resolver. It's responsible for retrieving the contents from the database and returning them to GraphQL.
 
@@ -158,10 +163,10 @@ class Query(graphene.ObjectType):
         :param offset: Refers to the count of how many records has already been returned
         :return: Last records starting from offset to last from the database
         """
-        if not content_id:
+        if not content:
             return Content.objects.all()\
                 .order_by('-created_at')[offset:offset+last]
-        return [Content.objects.get(id=content_id)]
+        return [Content.objects.get(id=content)]
 
 
 class Mutation(graphene.ObjectType):

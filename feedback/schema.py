@@ -23,7 +23,7 @@ class CreateFeedback(graphene.Mutation):
             raise Exception("A Feedback needs to be related to a content or to a comment")
         if vote != "U" and vote != "D":
             raise Exception("A Feedback can only be of type upvote or downvote")
-        user = info.context.META["context"]["user"]
+        user = info.context.user
         content = None
         comment = None
         if what == "content":

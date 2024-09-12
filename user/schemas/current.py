@@ -20,7 +20,7 @@ class UpdateCurrent(graphene.Mutation):
 
     def mutate(self, info, emoji_unicode=None, first_name=None, last_name=None, email=None):
         try:
-            user = info.context.META["context"]["user"]
+            user = info.context.user
             current = User.objects.get(id=user.id)
         except User.DoesNotExist:
             raise Exception("User not found")
@@ -53,7 +53,7 @@ class Query(graphene.ObjectType):
         :param info: Pass along the context of the query
         :return: The current authenticated user object from the database
         """
-        user = info.context.META["context"]["user"]
+        user = info.context.user
         return User.objects.get(id=user.id)
 
 
