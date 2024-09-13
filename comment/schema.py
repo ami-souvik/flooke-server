@@ -57,16 +57,16 @@ class CreateComment(graphene.Mutation):
     comment = graphene.Field(CommentType)
 
     def mutate(self, info, id, what, body):
-        if what != "comment" and what != "content" :
+        if what != "comment" and what != "content":
             raise Exception("A Comment needs to be related to a content or to a comment")
 
         user = info.context.user
         content = None
         comment = None
         if what == "content":
-            content=Content.objects.get(id=id)
+            content = Content.objects.get(id=id)
         if what == "comment":
-            comment=Comment.objects.get(id=id)
+            comment = Comment.objects.get(id=id)
             comment.has_reply = True
             comment.save()
 
@@ -123,6 +123,7 @@ class Query(graphene.ObjectType):
     comments = graphene.List(CommentType, id=graphene.ID(required=True), what=graphene.String(required=True),
                              last=graphene.Int(), offset=graphene.Int())
 
+    # TODO: comments pagination offset we have changed from id to created date
     def resolve_comments(self, info, id, what, last=10, offset=0):
         if what == "content":
             return Comment.objects.filter(content=id)\
