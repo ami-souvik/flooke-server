@@ -15,7 +15,7 @@ class ApplicationAuthMiddleware:
         # try:
             # In here the sleep command is used to simulate latency in the API while development
             # When deploying to production please remove or comment the following line
-            time.sleep(3)
+            time.sleep(1)
             if '/api/v1/token/' not in request.path:
                 auth_token = request.headers.get("Authorization", None)
                 auth_token = auth_token.replace("Bearer ", "").strip()

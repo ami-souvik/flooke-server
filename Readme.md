@@ -10,3 +10,7 @@ Heavility inspired from:
 
 AWS CI-CD for your Django app with AWS CodePipeline
 - https://blog.clairvoyantsoft.com/aws-ci-cd-for-your-django-app-with-aws-codepipeline-aafec23f9e55
+
+Emoji References:
+#https://unicode.org/Public/emoji/15.1/
+#https://unicode.org/Public/emoji/15.1/emoji-test.tx

@@ -1,0 +1,99 @@
+1F600; # 😀 E1.0 grinning face
+1F603; # 😃 E0.6 grinning face with big eyes
+1F604; # 😄 E0.6 grinning face with smiling eyes
+1F601; # 😁 E0.6 beaming face with smiling eyes
+1F606; # 😆 E0.6 grinning squinting face
+1F605; # 😅 E0.6 grinning face with sweat
+1F923; # 🤣 E3.0 rolling on the floor laughing
+1F602; # 😂 E0.6 face with tears of joy
+1F609; # 😉 E0.6 winking face
+1F60A; # 😊 E0.6 smiling face with smiling eyes
+1F607; # 😇 E1.0 smiling face with halo
+1F970; # 🥰 E11.0 smiling face with hearts
+1F60D; # 😍 E0.6 smiling face with heart-eyes
+1F929; # 🤩 E5.0 star-struck
+1F618; # 😘 E0.6 face blowing a kiss
+1F972; # 🥲 E13.0 smiling face with tear
+1F60B; # 😋 E0.6 face savoring food
+1F61B; # 😛 E1.0 face with tongue
+1F61C; # 😜 E0.6 winking face with tongue
+1F92A; # 🤪 E5.0 zany face
+1F61D; # 😝 E0.6 squinting face with tongue
+1F911; # 🤑 E1.0 money-mouth face
+1F917; # 🤗 E1.0 smiling face with open hands
+1F92D; # 🤭 E5.0 face with hand over mouth
+1FAE2; # 🫢 E14.0 face with open eyes and hand over mouth
+1FAE3; # 🫣 E14.0 face with peeking eye
+1F92B; # 🤫 E5.0 shushing face
+1F914; # 🤔 E1.0 thinking face
+1F910; # 🤐 E1.0 zipper-mouth face
+1F928; # 🤨 E5.0 face with raised eyebrow
+1F636; # 😶 E1.0 face without mouth
+1F60F; # 😏 E0.6 smirking face
+1F644; # 🙄 E1.0 face with rolling eyes
+1F62C; # 😬 E1.0 grimacing face
+1F62E; # 😮‍💨 E13.1 face exhaling
+1F925; # 🤥 E3.0 lying face
+1F92F; # 🤯 E5.0 exploding head
+1F978; # 🥸 E13.0 disguised face
+1F60E; # 😎 E1.0 smiling face with sunglasses
+1F913; # 🤓 E1.0 nerd face
+1F633; # 😳 E0.6 flushed face
+1F97A; # 🥺 E11.0 pleading face
+1F979; # 🥹 E14.0 face holding back tears
+1F608; # 😈 E1.0 smiling face with horns
+1F4A9; # 💩 E0.6 pile of poo
+1F921; # 🤡 E3.0 clown face
+1F47A; # 👺 E0.6 goblin
+1F47E; # 👾 E0.6 alien monster
+1F916; # 🤖 E1.0 robot
+1F435; # 🐵 E0.6 monkey face
+1F436; # 🐶 E0.6 dog face
+1F98A; # 🦊 E3.0 fox
+1F431; # 🐱 E0.6 cat face
+1F981; # 🦁 E1.0 lion
+1F43B; # 🐻 E0.6 bear
+1F428; # 🐨 E0.6 koala
+1F43C; # 🐼 E0.6 panda
+1F414; # 🐔 E0.6 chicken
+1F433; # 🐳 E0.6 spouting whale
+1F34E; # 🍎 E0.6 red apple
+1F350; # 🍐 E1.0 pear
+1F352; # 🍒 E0.6 cherries
+1FAD0; # 🫐 E13.0 blueberries
+1F95D; # 🥝 E3.0 kiwi fruit
+1F954; # 🥔 E3.0 potato
+1F35E; # 🍞 E0.6 bread
+1F950; # 🥐 E3.0 croissant
+1F968; # 🥨 E5.0 pretzel
+1F96F; # 🥯 E11.0 bagel
+1F9C7; # 🧇 E12.0 waffle
+1F9C0; # 🧀 E1.0 cheese wedge
+1F354; # 🍔 E0.6 hamburger
+1F35F; # 🍟 E0.6 french fries
+1F355; # 🍕 E0.6 pizza
+1F358; # 🍘 E0.6 rice cracker
+1F363; # 🍣 E0.6 sushi
+1F364; # 🍤 E0.6 fried shrimp
+1F369; # 🍩 E0.6 doughnut
+1F36A; # 🍪 E0.6 cookie
+1F36B; # 🍫 E0.6 chocolate bar
+1F36C; # 🍬 E0.6 candy
+1F36D; # 🍭 E0.6 lollipop
+1F36F; # 🍯 E0.6 honey pot
+1F379; # 🍹 E0.6 tropical drink
+1F37A; # 🍺 E0.6 beer mug
+1F94E; # 🥎 E11.0 softball
+1F3C0; # 🏀 E0.6 basketball
+1F3D0; # 🏐 E1.0 volleyball
+1F3C8; # 🏈 E0.6 american football
+1F3C9; # 🏉 E1.0 rugby football
+1F3BE; # 🎾 E0.6 tennis
+1F3D3; # 🏓 E1.0 ping pong
+1F93F; # 🤿 E12.0 diving mask
+1F3AF; # 🎯 E0.6 bullseye
+1F3B1; # 🎱 E0.6 pool 8 ball
+1F52E; # 🔮 E0.6 crystal ball
+1F3AE; # 🎮 E0.6 video game
+1F3B2; # 🎲 E0.6 game die
+1F9E9; # 🧩 E11.0 puzzle piece
