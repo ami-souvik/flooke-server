@@ -1,4 +1,5 @@
 import jwt
+import time
 from django.conf import settings
 from user.models import User
 from django.forms.models import model_to_dict
@@ -12,6 +13,9 @@ class ApplicationAuthMiddleware:
 
     def __call__(self, request):
         # try:
+            # In here the sleep command is used to simulate latency in the API while development
+            # When deploying to production please remove or comment the following line
+            time.sleep(3)
             if '/api/v1/token/' not in request.path:
                 auth_token = request.headers.get("Authorization", None)
                 auth_token = auth_token.replace("Bearer ", "").strip()
