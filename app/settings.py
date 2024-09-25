@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import os
 import environ
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -70,7 +71,7 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    # 'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
     'middleware.auth.ApplicationAuthMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -175,7 +176,7 @@ AUTH_USER_MODEL = "user.User"
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTStatelessUserAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
 }
 
@@ -184,6 +185,9 @@ AUTHENTICATION_BACKENDS = ['user.backends.ModelBackend']
 
 # Simple jwt authentication config
 SIMPLE_JWT = {
+    #https://django-rest-framework-simplejwt.readthedocs.io/en/latest/settings.html
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     # It will work instead of the default serializer(TokenObtainPairSerializer).
     # "TOKEN_OBTAIN_SERIALIZER": "user.serializers.ObtainTokenSerializer",
     # "TOKEN_REFRESH_SERIALIZER": 'user.serializers.RefreshTokenSerializer'

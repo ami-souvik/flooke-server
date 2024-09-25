@@ -18,6 +18,8 @@ class ApplicationAuthMiddleware:
             time.sleep(1)
             if '/api/v1/token/' not in request.path:
                 auth_token = request.headers.get("Authorization", None)
+                if not auth_token:
+                    raise(Exception("Our API needs authentication"))
                 auth_token = auth_token.replace("Bearer ", "").strip()
                 payload = jwt.decode(auth_token,
                                     key=settings.SECRET_KEY,
